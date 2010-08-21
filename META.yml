@@ -1,5 +1,5 @@
 ---
-abstract: 'The great new AnyEvent::Cron!'
+abstract: 'Crontab in AnyEvent! provide an interface to register event on specified time.'
 author:
   - 'Cornelius, C<< <cornelius.howl_at_gmail.com> >>'
   - 'Cornelius <cornelius.howl_at_gmail.com>'
@@ -24,4 +24,4 @@ requires:
   DateTime: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.01
+version: 0.02
