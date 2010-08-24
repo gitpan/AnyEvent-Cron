@@ -5,7 +5,7 @@ use DateTime;
 use AnyEvent;
 use Any::Moose;
 
-our $VERSION = '0.02';
+our $VERSION = '0.021';
 
 has after =>
     ( is => 'rw' , isa => 'Int' , default => sub { 0 } );
@@ -160,21 +160,32 @@ sub run {
                     }
                 }
                 elsif( $e->{type} eq 'datetime' ) {
-                    # ignore floating
-                    if( ! $e->{triggered} 
-                            && $dt->month == $e->{datetime}->month
-                            && $dt->day == $e->{datetime}->day
-                            && $dt->hour == $e->{datetime}->hour
-                            && $dt->minute == $e->{datetime}->minute
-                            && $dt->second == $e->{datetime}->second
-                        )
-                    {
-                        $self->_call_event( $e , $dt );
-                    }
+                    $self->_check_datetime( $e, $dt );
                 }
             }
         }
     );
+}
+
+sub _check_datetime {
+    my ($self,$e,$dt) = @_;
+    if( $self->ignore_floating ) { 
+        # ignore floating
+        if( ! $e->{triggered} 
+                && $dt->month == $e->{datetime}->month
+                && $dt->day == $e->{datetime}->day
+                && $dt->hour == $e->{datetime}->hour
+                && $dt->minute == $e->{datetime}->minute
+                && $dt->second == $e->{datetime}->second
+            ) {
+            $self->_call_event( $e , $dt );
+        }
+    }
+    else {
+        if( ! $e->{triggered} && $dt == $e->{datetime} ) {
+            $self->_call_event( $e , $dt );
+        }
+    }
 }
 
 
@@ -213,7 +224,6 @@ Or:
     $cron->add({  
         type => 'interval',
         second => 0 ,
-        triggered => 0,
         callback => sub { 
             warn "SECOND INTERVAL TRIGGERD";
         },

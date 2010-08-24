@@ -20,8 +20,9 @@ no_index:
     - inc
     - t
 requires:
+  Any::Moose: 0
   AnyEvent: 0
   DateTime: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.02
+version: 0.021
